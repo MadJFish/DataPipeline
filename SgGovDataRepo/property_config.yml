@@ -1,0 +1,5 @@
+resource_id: '42ff9cfe-abe5-4b54-beda-c88f9bb438ee'
+host: 'https://data.gov.sg'
+api: '/api/action/datastore_search'
+limit: 100
+offset: 0
