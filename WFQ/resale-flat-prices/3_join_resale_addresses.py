@@ -1,20 +1,11 @@
-import glob
-
-from geopy.exc import GeocoderTimedOut
 from geopy.geocoders import Nominatim
 
-import pyspark.sql.functions as sql_functions
 from pyspark.sql import SparkSession
-from pyspark.sql.types import *
-
-import datetime
-
-from WFQ.abbreviation_ref import expand_street_name
 
 APP_NAME = "join_resales_addresses"  # Any unique name works
 YEAR_FILTER = ['2020', '2021']
 INPUT_RESALES_FILE = "external_data/resale-flat-prices-based-on-registration-date-from-jan-2017-onwards.csv"
-INPUT_ADDRESS_FILE = "cleaned_data/addresses.csv"
+INPUT_ADDRESS_FILE = "cleaned_data/resale_addresses.csv"
 OUTPUT_FOLDER = "wip_data/resales_join_address"
 OUTPUT_FILE = "wip_data/resales_join_address.csv"
 
