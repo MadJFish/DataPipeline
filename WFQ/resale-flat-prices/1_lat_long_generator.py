@@ -67,6 +67,7 @@ def generate_geo_cache(addresses):
             address_lat_long_kvp[address] = address_lat_long
     return address_lat_long_kvp
 
+
 # Set up pyspark and geopy
 spark = SparkSession.builder.appName(APP_NAME).getOrCreate()
 geo_locator = Nominatim(user_agent=APP_NAME)

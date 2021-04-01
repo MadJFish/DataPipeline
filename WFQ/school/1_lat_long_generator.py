@@ -16,18 +16,6 @@ counter = [0]
 total = 0
 
 
-def get_df_filtered_by_years(df, years):
-    queries = []
-    for year in years:
-        queries.append("month LIKE '%s%%'" % year)
-    formulated_query = ' OR '.join(queries)
-    return df.filter(formulated_query)
-
-
-def get_address(block, street_name):
-    return '%s %s' % (block, expand_street_name(street_name))
-
-
 def generate_geo_cache(schools):
     school_lat_long_array = []
     for school in schools:
@@ -68,10 +56,6 @@ def generate_geo_cache(schools):
 spark = SparkSession.builder.appName(APP_NAME).getOrCreate()
 geo_locator = Nominatim(user_agent=APP_NAME)
 
-# Set up methods for pyspark dataframe
-# Reference: https://towardsdatascience.com/5-ways-to-add-a-new-column-in-a-pyspark-dataframe-4e75c2fd8c08
-udf_get_address = sql_functions.udf(get_address, StringType())
-
 # Read input
 all_df = spark.read.csv(INPUT_FILE, inferSchema=True, header=True)
 
@@ -100,32 +84,3 @@ geo_cache_df.write \
     .format('csv') \
     .option('header', 'true') \
     .save(OUTPUT_FOLDER)
-
-# # Add column 'address'
-# all_df = all_df.withColumn('address', udf_get_address('block', 'street_name'))
-#
-# # Get unique addresses
-# unique_address_df = all_df.select('block', 'street_name', 'address').dropDuplicates(['address'])
-#
-# # Get Total Count
-# total = unique_address_df.count()
-# print('Total Count: %d' % total)
-#
-# # Generate dictionary with lat long
-# address_array = [row.address for row in unique_address_df.select('address').collect()]
-# print("start time:-", datetime.datetime.now())
-# geo_cache_kvp = generate_geo_cache(address_array)
-# print('Geo_cache: %d' % len(geo_cache_kvp))
-# print("end time:-", datetime.datetime.now())
-#
-# # Create external_data frame
-# geo_cache_df = spark.createDataFrame(geo_cache_kvp.values())
-# geo_cache_df.show()
-# unique_address_df = unique_address_df.join(geo_cache_df, ['address'])
-# unique_address_df.show()
-#
-# # Export address and lat long as csv
-# unique_address_df.write \
-#     .format('csv') \
-#     .option('header', 'true') \
-#     .save(OUTPUT_FOLDER)
