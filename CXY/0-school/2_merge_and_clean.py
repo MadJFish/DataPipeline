@@ -1,18 +1,25 @@
+import sys
+import glob
+import logging
+import os
+from google.cloud import storage
+
 from geopy.exc import GeocoderTimedOut
 from geopy.geocoders import Nominatim
 
-import glob
-import os
 
-arg1=sys.argv[1]
-arg2=sys.argv[2]
 
 APP_NAME = "lat_long_generator"  # Any unique name works
-INPUT_FILES = arg1 if arg1 else 'wip_data/address_lat_long_ref_table/*.csv'
-OUTPUT_FILE = arg2 if arg2 else 'wip_data/merged.csv'
+BUCKET_NAME = "ebd-group-project-data-bucket"
+GS_DIR = "gs://ebd-group-project-data-bucket/0-school/1-wip-data"
+GS_OUTPUT_FILE = "gs://ebd-group-project-data-bucket/0-school/1-wip-data/merged.csv"
+LOCAL_DIR = "1-wip-data"
+INPUT_FILES = f"{LOCAL_DIR}/address_lat_long_ref_table/*.csv"
+OUTPUT_FILE = f"{LOCAL_DIR}//merged.csv"
 counter = [0]
 
 
+# get lat_long to check if in SG
 def query_lat_long(school):
     try:
         location = geo_locator.geocode(school)
@@ -35,12 +42,18 @@ def query_lat_long(school):
         return "Error: geocode failed on input %s" % school
 
 
+
+
 # Set up geopy
 geo_locator = Nominatim(user_agent=APP_NAME)
 
+
+
 # Remove existing output
-if os.path.exists(OUTPUT_FILE):
-    os.remove(OUTPUT_FILE)
+if os.path.exists(LOCAL_DIR):
+    os.system(f"rm -r {LOCAL_DIR}")
+
+os.system(f"gsutil -m cp -r {GS_DIR} .")
 
 with open(OUTPUT_FILE, 'w', encoding="cp437") as write_stream:
     address_index = None
@@ -73,3 +86,6 @@ with open(OUTPUT_FILE, 'w', encoding="cp437") as write_stream:
                 if counter[0] % 10 == 0:
                     print('Counted: ', counter[0])
             print('Total: ', counter[0])
+
+os.system(f"gsutil cp {OUTPUT_FILE} {GS_OUTPUT_FILE}")
+os.system(f"rm -r {LOCAL_DIR}")

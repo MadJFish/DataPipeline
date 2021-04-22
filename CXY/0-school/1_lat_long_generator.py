@@ -1,21 +1,26 @@
+import sys
+import datetime
+
 from geopy.exc import GeocoderTimedOut
 from geopy.geocoders import Nominatim
+
+import pyspark
+from pyspark.conf import SparkConf
 
 import pyspark.sql.functions as sql_functions
 from pyspark.sql import SparkSession
 from pyspark.sql.types import *
 
-import datetime
 
-from WFQ.abbreviation_ref import expand_street_name
-
+# Setting pyspark variables
 APP_NAME = "lat_long_generator"  # Any unique name works
-INPUT_FILE = "external_data/general-information-of-schools.csv"
-OUTPUT_FOLDER = "wip_data/address_lat_long_ref_table"
+INPUT_FILE = "gs://ebd-group-project-data-bucket/0-school/0-external-data/general-information-of-schools.csv"
+OUTPUT_FOLDER = "gs://ebd-group-project-data-bucket/0-school/1-wip-data/address_lat_long_ref_table"
 counter = [0]
 total = 0
 
 
+# Generate Gro cache
 def generate_geo_cache(schools):
     school_lat_long_array = []
     for school in schools:
@@ -51,13 +56,17 @@ def generate_geo_cache(schools):
         school_lat_long_array.append(school_lat_long)
     return school_lat_long_array
 
-
 # Set up pyspark and geopy
-spark = SparkSession.builder.appName(APP_NAME).getOrCreate()
+sc = pyspark.SparkContext()
 geo_locator = Nominatim(user_agent=APP_NAME)
+# spark = SparkSession.builder.config(sc.getConf).getOrCreate()
+# spark = SparkSession.builder.appName(APP_NAME).config(sc.getConf().getAll()).getOrCreate()
+spark = SparkSession.builder.appName(APP_NAME).config(conf=sc.getConf()).getOrCreate()
+
 
 # Read input
 all_df = spark.read.csv(INPUT_FILE, inferSchema=True, header=True)
+all_df.printSchema()
 
 # Filter Primary school
 primary_df = all_df.filter("mainlevel_code == '%s'" % 'PRIMARY')
