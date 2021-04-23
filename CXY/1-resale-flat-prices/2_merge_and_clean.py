@@ -1,25 +1,37 @@
+import sys
+import glob
+import logging
+import os
+import re
+from google.cloud import storage
+
 from geopy.exc import GeocoderTimedOut
 from geopy.geocoders import Nominatim
 
-import glob
-import os
+
 
 APP_NAME = "lat_long_generator"  # Any unique name works
-INPUT_FILES = 'wip_data/address_lat_long_ref_table/*.csv'
-OUTPUT_FILE = 'wip_data/merged.csv'
+BUCKET_NAME = "ebd-group-project-data-bucket"
+GS_DIR = "gs://ebd-group-project-data-bucket/1-resale-flat-prices/1-wip-data"
+GS_OUTPUT_FILE = "gs://ebd-group-project-data-bucket/1-resale-flat-prices/1-wip-data/merged.csv"
+LOCAL_DIR = "1-wip-data"
+INPUT_FILES = f"{LOCAL_DIR}/address_lat_long_ref_table/*.csv"
+OUTPUT_FILE = f"{LOCAL_DIR}//merged.csv"
+BAD_RECORD_OUTPUT_FILE = f"{LOCAL_DIR}//bad_records.csv"
 counter = [0]
+bad_records = []
 
-
+# get lat_long to check if in SG
 def query_lat_long(address):
     try:
         location = geo_locator.geocode(address)
         if location is not None:
-            input_address = address.upper().replace(' ', ', ', 1)
+            input_school = address.upper().replace(' ', ', ', 1)
             returned_address = location.address.upper()
             if 'SINGAPORE' not in returned_address:
                 return "Error: Not Singapore. Returned address %s" % location.address
             else:
-                if input_address not in returned_address:
+                if input_school not in returned_address:
                     if returned_address[0].isdigit():
                         return "Error: Road retrieved. Returned address %s" % location.address
                     else:
@@ -32,20 +44,18 @@ def query_lat_long(address):
         return "Error: geocode failed on input %s" % address
 
 
-def is_correct_location(input_address, returned_location):
-    input_address = input_address.upper().replace(' ', ', ', 1)
-    if input_address in returned_location.address.upper():
-        return True
-    else:
-        return False
 
 
 # Set up geopy
 geo_locator = Nominatim(user_agent=APP_NAME)
 
+
+
 # Remove existing output
-if os.path.exists(OUTPUT_FILE):
-    os.remove(OUTPUT_FILE)
+if os.path.exists(LOCAL_DIR):
+    os.system(f"rm -r {LOCAL_DIR}")
+
+os.system(f"gsutil -m cp -r {GS_DIR} .")
 
 with open(OUTPUT_FILE, 'w', encoding="cp437") as write_stream:
     address_index = None
@@ -72,9 +82,19 @@ with open(OUTPUT_FILE, 'w', encoding="cp437") as write_stream:
                         line_array[lat_long_index] = query_lat_long(line_array[address_index])
                     line = ','.join(line_array)
                     print('Tried: ', tries, '. ', line)
-                write_stream.write(line)
+
+                #if Error or None do not write
+                if re.findall('\"\d+\.\d+,\s\d+\.\d+\"', line):
+                    write_stream.write(line)
+                else:
+                    bad_records.append(line)
 
                 counter[0] += 1
                 if counter[0] % 10 == 0:
                     print('Counted: ', counter[0])
             print('Total: ', counter[0])
+
+with open(BAD_RECORD_OUTPUT_FILE, 'w') as f:
+    for item in bad_records:
+        f.write("%s\n" % item)
+

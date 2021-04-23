@@ -59,8 +59,6 @@ def generate_geo_cache(schools):
 # Set up pyspark and geopy
 sc = pyspark.SparkContext()
 geo_locator = Nominatim(user_agent=APP_NAME)
-# spark = SparkSession.builder.config(sc.getConf).getOrCreate()
-# spark = SparkSession.builder.appName(APP_NAME).config(sc.getConf().getAll()).getOrCreate()
 spark = SparkSession.builder.appName(APP_NAME).config(conf=sc.getConf()).getOrCreate()
 
 

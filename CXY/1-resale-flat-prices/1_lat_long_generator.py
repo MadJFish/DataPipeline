@@ -16,7 +16,7 @@ from abbreviation_ref import expand_street_name
 
 APP_NAME = "lat_long_generator"  # Any unique name works
 YEAR_FILTER = ['2020', '2021']
-INPUT_FILE = "gs://ebd-group-project-data-bucket/1-resale-flat-prices/0-external-data/resale-flat-prices-based-on-registration-date-from-jan-2017-onwards.csv"
+INPUT_FILE = "gs://ebd-group-project-data-bucket/1-resale-flat-prices/0-external-data/test.csv"
 OUTPUT_FOLDER = "gs://ebd-group-project-data-bucket/1-resale-flat-prices/1-wip-data/address_lat_long_ref_table"
 counter = [0]
 total = 0
@@ -96,7 +96,7 @@ all_df = all_df.withColumn('address', udf_get_address('block', 'street_name'))
 unique_address_df = all_df.select('block', 'street_name', 'address').dropDuplicates(['address'])
 
 # Get Total Count
-total = unique_address_df.count()
+total =  .count()
 print('Total Count: %d' % total)
 
 # Generate dictionary with lat long
