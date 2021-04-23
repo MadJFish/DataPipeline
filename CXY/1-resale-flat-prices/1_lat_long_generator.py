@@ -1,18 +1,23 @@
+import sys
+import datetime
+
 from geopy.exc import GeocoderTimedOut
 from geopy.geocoders import Nominatim
+
+import pyspark
+from pyspark.conf import SparkConf
 
 import pyspark.sql.functions as sql_functions
 from pyspark.sql import SparkSession
 from pyspark.sql.types import *
 
-import datetime
-
-from WFQ.abbreviation_ref import expand_street_name
+sys.path.append('..')
+from abbreviation_ref import expand_street_name
 
 APP_NAME = "lat_long_generator"  # Any unique name works
 YEAR_FILTER = ['2020', '2021']
-INPUT_FILE = "external_data/resale-flat-prices-based-on-registration-date-from-jan-2017-onwards.csv"
-OUTPUT_FOLDER = "wip_data/address_lat_long_ref_table"
+INPUT_FILE = "gs://ebd-group-project-data-bucket/1-resale-flat-prices/0-external-data/resale-flat-prices-based-on-registration-date-from-jan-2017-onwards.csv"
+OUTPUT_FOLDER = "gs://ebd-group-project-data-bucket/1-resale-flat-prices/1-wip-data/address_lat_long_ref_table"
 counter = [0]
 total = 0
 
@@ -69,8 +74,10 @@ def generate_geo_cache(addresses):
 
 
 # Set up pyspark and geopy
-spark = SparkSession.builder.appName(APP_NAME).getOrCreate()
+sc = pyspark.SparkContext()
+sc.addPyFile("../abbreviation_ref.py")
 geo_locator = Nominatim(user_agent=APP_NAME)
+spark = SparkSession.builder.appName(APP_NAME).config(conf=sc.getConf()).getOrCreate()
 
 # Set up methods for pyspark dataframe
 # Reference: https://towardsdatascience.com/5-ways-to-add-a-new-column-in-a-pyspark-dataframe-4e75c2fd8c08

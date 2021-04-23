@@ -20,7 +20,7 @@ counter = [0]
 total = 0
 
 
-# Generate Gro cache
+# Generate Geo cache
 def generate_geo_cache(schools):
     school_lat_long_array = []
     for school in schools:
