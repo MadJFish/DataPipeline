@@ -61,10 +61,13 @@
 	gsutil cp ./2_merge_and_clean.py gs://ebd-group-project-data-bucket/0-school/2_merge_and_clean.py
 
 # SSH to DataProc MasterNode
-ssh -i cxuanyi cxuanyi@34.93.71.35
+	ssh -i cxuanyi cxuanyi@34.93.71.35
 
 #Submit spark job
-spark-submit 1_lat_long_generator.py
+	spark-submit 1_lat_long_generator.py
 
 # Add to Linux Path
 	export PATH=/home/cxuanyi/Development/google-cloud-sdk/bin:$PATH
+
+# Shell scripting
+	chmod +x 0_start_processing.sh
