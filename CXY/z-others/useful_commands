@@ -1,0 +1,70 @@
+# setup log4j protiers
+    nano log4j.properties
+
+	# Set everything to be logged to the console
+	log4j.rootCategory=WARN, console
+	log4j.appender.console=org.apache.log4j.ConsoleAppender
+	log4j.appender.console.target=System.err
+	log4j.appender.console.layout=org.apache.log4j.PatternLayout
+	log4j.appender.console.layout.ConversionPattern=%d{yy/MM/dd HH:mm:ss} %p %c{1}: %m%n
+
+	# Settings to quiet third party logs that are too verbose
+	log4j.logger.org.eclipse.jetty=WARN
+	log4j.logger.org.eclipse.jetty.util.component.AbstractLifeCycle=ERROR
+	log4j.logger.org.apache.spark.repl.SparkIMain$exprTyper=WARN
+	log4j.logger.org.apache.spark.repl.SparkILoop$SparkILoopInterpreter=WARN
+
+# Set permission to public for the bucket, if not there will be permission failed error
+    gsutil -m acl set -R -a public-read gs://ebd-group-project-hdb-pricing
+    gsutil -m acl set -R -a public-read gs://ebd-group-project-hdb-pricing/0-school/2-cleaned-data/school_lat_long.csv
+
+    gsutil acl ch -u AllUsers:R gs://ebd-group-project-hdb-pricing
+
+    gsutil acl ch -u AllUsers:R gs://ebd-group-project-hdb-pricing
+
+
+# start spark-sql with my username cxuanyi
+    spark-sql --driver-java-options "-Dlog4j.configuration=file:///home/cxuanyi/log4j.properties"
+
+	CREATE EXTERNAL TABLE school_lat_long 
+	(lat VARCHAR(50), lng VARCHAR(50), school VARCHAR(50)) 
+	ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' 
+	LOCATION 'gs://ebd-group-project-data-bucket/0-school/2-cleaned-data/school_lat_long.*';
+
+
+	CREATE EXTERNAL TABLE trades_sample
+	(trading_date_time TIMESTAMP,
+	network CHAR(1),
+	message_category CHAR(1),
+	message_type CHAR(1),
+	message_sequence BIGINT,
+	market_exchange CHAR(1),
+	symbol VARCHAR(10),
+	trade_price DOUBLE,
+	trade_size BIGINT,
+	trade_conditions VARCHAR(6),
+	trade_conditions2 VARCHAR(6) )
+	ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+	LOCATION 'gs://xy_test_dataproc_gs/data/trades_sample.csv';
+
+	CREATE EXTERNAL TABLE school_lat_long 
+	(lat_long VARCHAR(100), school VARCHAR(100)) 
+	ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' 
+	LOCATION 'gs://xy_test_dataproc_gs/data/school_lat_long.*';
+
+# test copy file from Google storage
+	# Download
+    gsutil cp gs://ebd-group-project-hdb-pricing/0-school/2-cleaned-data/school_lat_long.csv .
+    gsutil cp gs://ebd-group-project-data-bucket/0-school/2b_merge_and_clean.py .
+
+	# Upload
+	gsutil cp ./2_merge_and_clean.py gs://ebd-group-project-data-bucket/0-school/2_merge_and_clean.py
+
+# SSH to DataProc MasterNode
+ssh -i cxuanyi cxuanyi@34.93.71.35
+
+#Submit spark job
+spark-submit 1_lat_long_generator.py
+
+# Add to Linux Path
+	export PATH=/home/cxuanyi/Development/google-cloud-sdk/bin:$PATH

@@ -2,6 +2,7 @@ import sys
 import glob
 import logging
 import os
+import re
 from google.cloud import storage
 
 from geopy.exc import GeocoderTimedOut
@@ -16,8 +17,9 @@ GS_OUTPUT_FILE = "gs://ebd-group-project-data-bucket/0-school/1-wip-data/merged.
 LOCAL_DIR = "1-wip-data"
 INPUT_FILES = f"{LOCAL_DIR}/address_lat_long_ref_table/*.csv"
 OUTPUT_FILE = f"{LOCAL_DIR}//merged.csv"
+BAD_RECORD_OUTPUT_FILE = f"{LOCAL_DIR}//bad_records.csv"
 counter = [0]
-
+bad_records = []
 
 # get lat_long to check if in SG
 def query_lat_long(school):
@@ -80,12 +82,19 @@ with open(OUTPUT_FILE, 'w', encoding="cp437") as write_stream:
                         line_array[lat_long_index] = query_lat_long(line_array[address_index])
                     line = ','.join(line_array)
                     print('Tried: ', tries, '. ', line)
-                write_stream.write(line)
+
+                #if Error or None do not write
+                if re.findall('\"\d+\.\d+,\s\d+\.\d+\"', line):
+                    write_stream.write(line)
+                else:
+                    bad_records.append(line)
 
                 counter[0] += 1
                 if counter[0] % 10 == 0:
                     print('Counted: ', counter[0])
             print('Total: ', counter[0])
 
-os.system(f"gsutil cp {OUTPUT_FILE} {GS_OUTPUT_FILE}")
-os.system(f"rm -r {LOCAL_DIR}")
+with open(BAD_RECORD_OUTPUT_FILE, 'w') as f:
+    for item in bad_records:
+        f.write("%s\n" % item)
+
