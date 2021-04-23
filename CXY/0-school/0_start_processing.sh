@@ -9,6 +9,9 @@ gsutil rm -r gs://ebd-group-project-data-bucket/0-school/1-wip-data/*
 touch ./1-wip-data/placeholder.txt
 gsutil cp -r 1-wip-data gs://ebd-group-project-data-bucket/0-school
 
+gsutil rm -r gs://ebd-group-project-data-bucket/0-school/2-cleaned-data/*
+touch ./2-cleaned-data/placeholder.txt
+gsutil cp -r 2-cleaned-data gs://ebd-group-project-data-bucket/0-school
 
 # 2. Execute: spark-submit 1_lat_long_generator.py
 echo "#####################################################################"
@@ -37,6 +40,7 @@ echo "#####################################################################"
 echo "#####################################################################"
 
 gsutil cp -r 1-wip-data/* gs://ebd-group-project-data-bucket/0-school/1-wip-data/
+gsutil cp -r 1-wip-data/merged.csv gs://ebd-group-project-data-bucket/0-school/2-cleaned-data/school_lat_long.csv
 
 # 5. Clear WIP folder
 echo "#####################################################################"
@@ -46,3 +50,4 @@ echo "#####################################################################"
 echo "#####################################################################"
 
 rm -r 1-wip-data/*
+rm -r 2-cleaned-data/*
