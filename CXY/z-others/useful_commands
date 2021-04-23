@@ -70,8 +70,22 @@
 #Submit spark job
 	spark-submit 1_lat_long_generator.py
 	spark-submit --py-files ../*.py 1_lat_long_generator.py
+
 # Add to Linux Path
 	export PATH=/home/cxuanyi/Development/google-cloud-sdk/bin:$PATH
 
 # Shell scripting
+	chmod +x 0_start_processing.sh
+
+# sync 0-school code
+	gsutil cp gs://ebd-group-project-data-bucket/0-school/0_start_processing.sh .
+	gsutil cp gs://ebd-group-project-data-bucket/0-school/1_lat_long_generator.py .
+	gsutil cp gs://ebd-group-project-data-bucket/0-school/2_merge_and_clean.py .
+	chmod +x 0_start_processing.sh
+	
+# sync 1-resale-flat-prices
+	gsutil cp gs://ebd-group-project-data-bucket/1-resale-flat-prices/0_start_processing.sh .
+	gsutil cp gs://ebd-group-project-data-bucket/1-resale-flat-prices/1_lat_long_generator.py .
+	gsutil cp gs://ebd-group-project-data-bucket/1-resale-flat-prices/2_merge_and_clean.py .
+	gsutil cp gs://ebd-group-project-data-bucket/1-resale-flat-prices/3_join_resale_addresses.py .
 	chmod +x 0_start_processing.sh

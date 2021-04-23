@@ -56,11 +56,6 @@ def query_lat_long(address):
 geo_locator = Nominatim(user_agent=APP_NAME)
 
 
-
-# Remove existing output
-if os.path.exists(LOCAL_DIR):
-    os.system(f"rm -r {LOCAL_DIR}")
-
 os.system(f"gsutil -m cp -r {GS_DIR} .")
 
 with open(OUTPUT_FILE, 'w', encoding="cp437") as write_stream:
