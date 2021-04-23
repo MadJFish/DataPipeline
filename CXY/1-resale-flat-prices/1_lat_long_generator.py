@@ -96,7 +96,7 @@ all_df = all_df.withColumn('address', udf_get_address('block', 'street_name'))
 unique_address_df = all_df.select('block', 'street_name', 'address').dropDuplicates(['address'])
 
 # Get Total Count
-total =  .count()
+total = unique_address_df.count()
 print('Total Count: %d' % total)
 
 # Generate dictionary with lat long

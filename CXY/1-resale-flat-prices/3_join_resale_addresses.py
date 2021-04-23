@@ -1,13 +1,22 @@
+import sys
+import datetime
+
+from geopy.exc import GeocoderTimedOut
 from geopy.geocoders import Nominatim
 
+import pyspark
+from pyspark.conf import SparkConf
+
+import pyspark.sql.functions as sql_functions
 from pyspark.sql import SparkSession
+from pyspark.sql.types import *
 
 APP_NAME = "join_resales_addresses"  # Any unique name works
 YEAR_FILTER = ['2020', '2021']
-INPUT_RESALES_FILE = "external_data/resale-flat-prices-based-on-registration-date-from-jan-2017-onwards.csv"
-INPUT_ADDRESS_FILE = "cleaned_data/resale_addresses.csv"
-OUTPUT_FOLDER = "wip_data/resales_join_address"
-OUTPUT_FILE = "wip_data/resales_join_address.csv"
+INPUT_RESALES_FILE = "gs://ebd-group-project-data-bucket/1-resale-flat-prices/0-external-data/test.csv"
+INPUT_ADDRESS_FILE = "gs://ebd-group-project-data-bucket/1-resale-flat-prices/0-external-data/resale_addresses.csv"
+OUTPUT_FOLDER = "gs://ebd-group-project-data-bucket/1-resale-flat-prices/1-wip-data/resales_join_address"
+OUTPUT_FILE = "gs://ebd-group-project-data-bucket/1-resale-flat-prices/1-wip-data/resales_join_address.csv"
 
 
 def get_df_filtered_by_years(df, years):
@@ -19,8 +28,9 @@ def get_df_filtered_by_years(df, years):
 
 
 # Set up pyspark and geopy
-spark = SparkSession.builder.appName(APP_NAME).getOrCreate()
+sc = pyspark.SparkContext()
 geo_locator = Nominatim(user_agent=APP_NAME)
+spark = SparkSession.builder.appName(APP_NAME).config(conf=sc.getConf()).getOrCreate()
 
 # Read input
 resales_df = spark.read.csv(INPUT_RESALES_FILE, inferSchema=True, header=True)

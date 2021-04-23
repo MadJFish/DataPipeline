@@ -8,18 +8,24 @@ from google.cloud import storage
 from geopy.exc import GeocoderTimedOut
 from geopy.geocoders import Nominatim
 
+targetSubDirectory = "address_lat_long_ref_table"
+outputFileName = "merged.csv"
 
+if len(sys.argv) == 3:
+    targetSubDirectory = sys.argv[1]
+    outputFileName = sys.argv[2]
 
 APP_NAME = "lat_long_generator"  # Any unique name works
 BUCKET_NAME = "ebd-group-project-data-bucket"
 GS_DIR = "gs://ebd-group-project-data-bucket/1-resale-flat-prices/1-wip-data"
-GS_OUTPUT_FILE = "gs://ebd-group-project-data-bucket/1-resale-flat-prices/1-wip-data/merged.csv"
 LOCAL_DIR = "1-wip-data"
-INPUT_FILES = f"{LOCAL_DIR}/address_lat_long_ref_table/*.csv"
-OUTPUT_FILE = f"{LOCAL_DIR}//merged.csv"
-BAD_RECORD_OUTPUT_FILE = f"{LOCAL_DIR}//bad_records.csv"
+INPUT_FILES = f"{LOCAL_DIR}/{targetSubDirectory}/*.csv"
+OUTPUT_FILE = f"{LOCAL_DIR}/{outputFileName}.csv"
+BAD_RECORD_OUTPUT_FILE = f"{LOCAL_DIR}/bad_records_{targetSubDirectory}.csv"
 counter = [0]
 bad_records = []
+
+print(INPUT_FILES)
 
 # get lat_long to check if in SG
 def query_lat_long(address):

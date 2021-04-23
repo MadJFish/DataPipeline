@@ -16,8 +16,8 @@ GS_DIR = "gs://ebd-group-project-data-bucket/0-school/1-wip-data"
 GS_OUTPUT_FILE = "gs://ebd-group-project-data-bucket/0-school/1-wip-data/merged.csv"
 LOCAL_DIR = "1-wip-data"
 INPUT_FILES = f"{LOCAL_DIR}/address_lat_long_ref_table/*.csv"
-OUTPUT_FILE = f"{LOCAL_DIR}//merged.csv"
-BAD_RECORD_OUTPUT_FILE = f"{LOCAL_DIR}//bad_records.csv"
+OUTPUT_FILE = f"{LOCAL_DIR}/merged.csv"
+BAD_RECORD_OUTPUT_FILE = f"{LOCAL_DIR}/bad_records.csv"
 counter = [0]
 bad_records = []
 
