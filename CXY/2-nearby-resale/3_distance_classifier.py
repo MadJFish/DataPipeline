@@ -41,7 +41,6 @@ for blob in blobs:
     file_name = f"gs://{BUCKET_NAME}/{blob.name}"
     
     if (file_name.endswith(".csv")):
-        print(f"CHHHHHHEEEECCCCKKKK: {file_name}")
         # Read input
         school_resale_df = spark.read.csv(file_name, inferSchema=True, header=True)
 
@@ -54,15 +53,16 @@ for blob in blobs:
             .agg(
                 mean('distance').alias('avg_distance'),
                 mean('resale_price').alias('avg_resale_price'),
+                mean('sqm_resale_price').alias('avg_sqm_resale_price'),
                 count('*').alias('count')
             )
-
-        # # Export to csv
-        # school_name = re.split('/|\\\\', file_name)[2]
-        # output_folder = '%s/%s' % (OUTPUT_PARENT_FOLDER, school_name)
-        # avg_school_resale_df \
-        #     .coalesce(1) \
-        #     .write \
-        #     .format('csv') \
-        #     .option('header', 'true') \
-        #     .save(output_folder)
+            
+        # Export to csv
+        school_name = re.split('/|\\\\', file_name)[6]
+        output_folder = '%s/%s' % (OUTPUT_PARENT_FOLDER, school_name)
+        avg_school_resale_df \
+            .coalesce(1) \
+            .write \
+            .format('csv') \
+            .option('header', 'true') \
+            .save(output_folder)

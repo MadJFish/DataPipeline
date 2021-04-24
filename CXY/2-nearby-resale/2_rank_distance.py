@@ -45,6 +45,7 @@ for blob in blobs:
         school_resale_df = spark.read.csv(file_name, inferSchema=True, header=True)
         school_resale_df = school_resale_df \
             .withColumn('rank', udf_rank_distance('distance')) \
+            .withColumn("sqm_resale_price", (sql_functions.col("resale_price") / sql_functions.col("floor_area_sqm")))\
             .orderBy('distance')
 
         # Export to csv

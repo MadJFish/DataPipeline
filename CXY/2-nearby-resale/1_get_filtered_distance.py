@@ -11,7 +11,7 @@ from pyspark.sql.functions import lit
 from pyspark.sql.types import *
 
 APP_NAME = "get_filtered_distance"  # Any unique name works
-INPUT_RESALE_FILE = "gs://ebd-group-project-data-bucket/2-nearby-resale/0-external-data/resale_lat_long.csv"
+INPUT_RESALE_FILE = "gs://ebd-group-project-data-bucket/2-nearby-resale/0-external-data/resales_join_address.csv"
 INPUT_SCHOOL_FILE = "gs://ebd-group-project-data-bucket/2-nearby-resale/0-external-data/school_lat_long.csv"
 OUTPUT_PARENT_FOLDER = "gs://ebd-group-project-data-bucket/2-nearby-resale/1-wip-data/1_get_filtered_distance"
 
