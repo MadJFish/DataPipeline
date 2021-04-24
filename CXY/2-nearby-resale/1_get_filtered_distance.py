@@ -1,4 +1,9 @@
+import sys
+import datetime
 from math import radians, cos, sin, asin, sqrt
+
+import pyspark
+from pyspark.conf import SparkConf
 
 import pyspark.sql.functions as sql_functions
 from pyspark.sql import SparkSession
@@ -6,9 +11,9 @@ from pyspark.sql.functions import lit
 from pyspark.sql.types import *
 
 APP_NAME = "get_filtered_distance"  # Any unique name works
-INPUT_RESALE_FILE = "../resale-flat-prices/cleaned_data/resale_lat_long.csv"
-INPUT_SCHOOL_FILE = "../school/cleaned_data/school_lat_long.csv"
-OUTPUT_PARENT_FOLDER = "wip_data/1_get_filtered_distance"
+INPUT_RESALE_FILE = "gs://ebd-group-project-data-bucket/2-nearby-resale/0-external-data/resale_lat_long.csv"
+INPUT_SCHOOL_FILE = "gs://ebd-group-project-data-bucket/2-nearby-resale/0-external-data/school_lat_long.csv"
+OUTPUT_PARENT_FOLDER = "gs://ebd-group-project-data-bucket/2-nearby-resale/1-wip-data/1_get_filtered_distance"
 
 
 def get_distance(school_lat_long, resale_lat_long):
@@ -41,7 +46,8 @@ def haversine(lon1, lat1, lon2, lat2):
 
 
 # Set up pyspark and geopy
-spark = SparkSession.builder.appName(APP_NAME).getOrCreate()
+sc = pyspark.SparkContext()
+spark = SparkSession.builder.appName(APP_NAME).config(conf=sc.getConf()).getOrCreate()
 
 # Set up methods for pyspark dataframe
 # Reference: https://towardsdatascience.com/5-ways-to-add-a-new-column-in-a-pyspark-dataframe-4e75c2fd8c08
