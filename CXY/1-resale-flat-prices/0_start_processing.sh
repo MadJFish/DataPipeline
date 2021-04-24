@@ -39,6 +39,7 @@ echo "#####################################################################"
 
 pythonfile=$(readlink -f 2_merge_and_clean.py)
 python $pythonfile "address_lat_long_ref_table" "resale_lat_long"
+gsutil cp -r 1-wip-data/resale_lat_long.csv gs://ebd-group-project-data-bucket/1-resale-flat-prices/1-wip-data/
 
 # 3. Execute: spark-submit 1_lat_long_generator.py
 echo "#####################################################################"
