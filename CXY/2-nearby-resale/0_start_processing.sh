@@ -1,7 +1,7 @@
 # 1. Clear GCS folder before running 1_lat_long_generator.py
 echo "#####################################################################"
 echo "#####################################################################"
-echo "#### 1. Clear GCS folder before running 1_lat_long_generator.py #####"
+echo "### 1. Clear GCS folder before running 1_get_filtered_distance.py ###"
 echo "#####################################################################"
 echo "#####################################################################"
 

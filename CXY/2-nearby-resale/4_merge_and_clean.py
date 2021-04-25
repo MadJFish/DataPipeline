@@ -40,12 +40,11 @@ with open(OUTPUT_FILE, 'w', encoding="cp437") as write_stream:
             if is_print_header:
                 is_print_header = False
                 write_stream.write(header)
-            else:
-                write_stream.write(line)
 
             counter[0] = 0
             for line in read_stream:
-                line_array = line.strip().split(',')
+                write_stream.write(line)
+
 
                 counter[0] += 1
                 if counter[0] % 10 == 0:
