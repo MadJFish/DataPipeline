@@ -2,7 +2,7 @@ from pyspark.ml.regression import GeneralizedLinearRegression
 from pyspark.ml.feature import VectorAssembler
 from pyspark.sql.utils import AnalysisException
 INPUT_FILE = 'gs://ebd-group-project-data-bucket/2-nearby-resale/1-wip-data/merged_2_rank_distance.csv'
-OUTPUT_DIR = 'gs://ebd-group-project-data-bucket/2-nearby-resale/1-wip-data/4_prediction2/'
+OUTPUT_DIR = 'gs://ebd-group-project-data-bucket/2-nearby-resale/1-wip-data/4_prediction/'
 df = spark.read.csv(INPUT_FILE, inferSchema=True, header=True)
 
 # from pyspark.sql.functions import col
@@ -17,7 +17,7 @@ df_features = assembler.transform(df)
 
 # Create model for each school
 model_list = []
-for school in school_list[:5]:
+for school in school_list:
     print(school)
     df_filtered = df_features.filter(df.school == school)
     glr = GeneralizedLinearRegression(family="gaussian", link="identity", linkPredictionCol="p",
