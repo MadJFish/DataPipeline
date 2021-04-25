@@ -16,7 +16,7 @@ from abbreviation_ref import expand_street_name
 
 APP_NAME = "lat_long_generator"  # Any unique name works
 YEAR_FILTER = ['2020', '2021']
-INPUT_FILE = "gs://ebd-group-project-data-bucket/1-resale-flat-prices/0-external-data/test.csv"
+INPUT_FILE = "gs://ebd-group-project-data-bucket/1-resale-flat-prices/0-external-data/resale-flat-prices-based-on-registration-date-from-jan-2017-onwards.csv"
 OUTPUT_FOLDER = "gs://ebd-group-project-data-bucket/1-resale-flat-prices/1-wip-data/address_lat_long_ref_table"
 counter = [0]
 total = 0

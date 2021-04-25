@@ -51,17 +51,17 @@ echo "#####################################################################"
 
 spark-submit 3_distance_classifier.py
 
-4. Copy output file to GCS
+# 4. Copy output file to GCS
 echo "#####################################################################"
 echo "#####################################################################"
 echo "#################### 4. Copy output file to GCS #####################"
 echo "#####################################################################"
 echo "#####################################################################"
 
-gsutil cp -r 1-wip-data/* gs://ebd-group-project-data-bucket/2-nearby-resale/1-wip-data/
-gsutil cp -r 1-wip-data/* gs://ebd-group-project-data-bucket/2-nearby-resale/2-cleaned-data/
+gsutil cp -r 1-wip-data gs://ebd-group-project-data-bucket/2-nearby-resale/2-cleaned-data/
+gsutil cp -r gs://ebd-group-project-data-bucket/2-nearby-resale/1-wip-data/* gs://ebd-group-project-data-bucket/2-nearby-resale/2-cleaned-data
 
-5. Clear WIP folder
+#5. Clear WIP folder
 echo "#####################################################################"
 echo "#####################################################################"
 echo "####################### 5. Clear WIP folder #########################"
