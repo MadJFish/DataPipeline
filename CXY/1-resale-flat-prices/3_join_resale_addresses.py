@@ -13,8 +13,8 @@ from pyspark.sql.types import *
 
 APP_NAME = "join_resales_addresses"  # Any unique name works
 YEAR_FILTER = ['2020', '2021']
-INPUT_RESALES_FILE = "gs://ebd-group-project-data-bucket/1-resale-flat-prices/0-external-data/test.csv"
-INPUT_ADDRESS_FILE = "gs://ebd-group-project-data-bucket/1-resale-flat-prices/0-external-data/resale_addresses.csv"
+INPUT_RESALES_FILE = "gs://ebd-group-project-data-bucket/1-resale-flat-prices/0-external-data/resale-flat-prices-based-on-registration-date-from-jan-2017-onwards.csv"
+INPUT_ADDRESS_FILE = "gs://ebd-group-project-data-bucket/1-resale-flat-prices/1-wip-data/resale_lat_long.csv"
 OUTPUT_FOLDER = "gs://ebd-group-project-data-bucket/1-resale-flat-prices/1-wip-data/resales_join_address"
 OUTPUT_FILE = "gs://ebd-group-project-data-bucket/1-resale-flat-prices/1-wip-data/resales_join_address.csv"
 

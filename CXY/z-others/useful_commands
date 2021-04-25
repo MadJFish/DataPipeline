@@ -78,14 +78,45 @@
 	chmod +x 0_start_processing.sh
 
 # sync 0-school code
-	gsutil cp gs://ebd-group-project-data-bucket/0-school/0_start_processing.sh .
-	gsutil cp gs://ebd-group-project-data-bucket/0-school/1_lat_long_generator.py .
-	gsutil cp gs://ebd-group-project-data-bucket/0-school/2_merge_and_clean.py .
-	chmod +x 0_start_processing.sh
+	# Upload code to GCS
+		gsutil cp 0_start_processing.sh gs://ebd-group-project-data-bucket/0-school
+		gsutil cp 1_lat_long_generator.py gs://ebd-group-project-data-bucket/0-school
+		gsutil cp 2_merge_and_clean.py gs://ebd-group-project-data-bucket/0-school
+
+	# Download code from GCS
+		gsutil cp gs://ebd-group-project-data-bucket/0-school/0_start_processing.sh .
+		gsutil cp gs://ebd-group-project-data-bucket/0-school/1_lat_long_generator.py .
+		gsutil cp gs://ebd-group-project-data-bucket/0-school/2_merge_and_clean.py .
+		chmod +x 0_start_processing.sh
 	
 # sync 1-resale-flat-prices
-	gsutil cp gs://ebd-group-project-data-bucket/1-resale-flat-prices/0_start_processing.sh .
-	gsutil cp gs://ebd-group-project-data-bucket/1-resale-flat-prices/1_lat_long_generator.py .
-	gsutil cp gs://ebd-group-project-data-bucket/1-resale-flat-prices/2_merge_and_clean.py .
-	gsutil cp gs://ebd-group-project-data-bucket/1-resale-flat-prices/3_join_resale_addresses.py .
-	chmod +x 0_start_processing.sh
+	# Upload code to GCS
+		gsutil cp 0_start_processing.sh gs://ebd-group-project-data-bucket/1-resale-flat-prices
+		gsutil cp 1_lat_long_generator.py gs://ebd-group-project-data-bucket/1-resale-flat-prices
+		gsutil cp 2_merge_and_clean.py gs://ebd-group-project-data-bucket/1-resale-flat-prices
+		gsutil cp 3_join_resale_addresses.py gs://ebd-group-project-data-bucket/1-resale-flat-prices
+
+	# Download code from GCS
+		gsutil cp gs://ebd-group-project-data-bucket/1-resale-flat-prices/0_start_processing.sh .
+		gsutil cp gs://ebd-group-project-data-bucket/1-resale-flat-prices/1_lat_long_generator.py .
+		gsutil cp gs://ebd-group-project-data-bucket/1-resale-flat-prices/2_merge_and_clean.py .
+		gsutil cp gs://ebd-group-project-data-bucket/1-resale-flat-prices/3_join_resale_addresses.py .
+		chmod +x 0_start_processing.sh
+	
+# sync 2-nearby-resale
+	# Upload code to GCS
+		gsutil cp 0_start_processing.sh gs://ebd-group-project-data-bucket/2-nearby-resale
+		gsutil cp 1_get_filtered_distance.py gs://ebd-group-project-data-bucket/2-nearby-resale/
+		gsutil cp 2_rank_distance.py gs://ebd-group-project-data-bucket/2-nearby-resale/
+		gsutil cp 3_distance_classifier.py gs://ebd-group-project-data-bucket/2-nearby-resale/
+		gsutil cp 4_merge_and_clean.py gs://ebd-group-project-data-bucket/2-nearby-resale/
+		gsutil cp 5_sync_to_bigquery.py gs://ebd-group-project-data-bucket/2-nearby-resale/
+
+	# Download code from GCS
+		gsutil cp gs://ebd-group-project-data-bucket/2-nearby-resale/0_start_processing.sh .
+		gsutil cp gs://ebd-group-project-data-bucket/2-nearby-resale/1_get_filtered_distance.py .
+		gsutil cp gs://ebd-group-project-data-bucket/2-nearby-resale/2_rank_distance.py .
+		gsutil cp gs://ebd-group-project-data-bucket/2-nearby-resale/3_distance_classifier.py .
+		gsutil cp gs://ebd-group-project-data-bucket/2-nearby-resale/4_merge_and_clean.py .
+		gsutil cp gs://ebd-group-project-data-bucket/2-nearby-resale/5_sync_to_bigquery.py .
+		chmod +x 0_start_processing.sh
