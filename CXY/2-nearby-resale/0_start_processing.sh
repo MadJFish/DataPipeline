@@ -94,12 +94,26 @@ echo "#####################################################################"
 gsutil -m cp -r 1-wip-data gs://ebd-group-project-data-bucket/2-nearby-resale/2-cleaned-data/
 gsutil -m cp -r gs://ebd-group-project-data-bucket/2-nearby-resale/1-wip-data/* gs://ebd-group-project-data-bucket/2-nearby-resale/2-cleaned-data
 
+# 5. Upload to BigQuery
+echo "#####################################################################"
+echo "#####################################################################"
+echo "###################### 5. Upload to BigQuery ########################"
+echo "#####################################################################"
+echo "#####################################################################"
+
+pythonfile=$(readlink -f 5_sync_to_bigquery.py)
+python $pythonfile True ebd_group_project merged_1_get_filtered_distance.csv
+python $pythonfile False ebd_group_project merged_2_rank_distance.csv
+python $pythonfile False ebd_group_project merged_3_distance_classifier.csv
+
+
 #5. Clear WIP folder
 echo "#####################################################################"
 echo "#####################################################################"
 echo "####################### 5. Clear WIP folder #########################"
 echo "#####################################################################"
 echo "#####################################################################"
+
 
 rm -r 1-wip-data/*
 rm -r 2-cleaned-data/*

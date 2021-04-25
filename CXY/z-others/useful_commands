@@ -110,6 +110,7 @@
 		gsutil cp 2_rank_distance.py gs://ebd-group-project-data-bucket/2-nearby-resale/
 		gsutil cp 3_distance_classifier.py gs://ebd-group-project-data-bucket/2-nearby-resale/
 		gsutil cp 4_merge_and_clean.py gs://ebd-group-project-data-bucket/2-nearby-resale/
+		gsutil cp 5_sync_to_bigquery.py gs://ebd-group-project-data-bucket/2-nearby-resale/
 
 	# Download code from GCS
 		gsutil cp gs://ebd-group-project-data-bucket/2-nearby-resale/0_start_processing.sh .
@@ -117,4 +118,5 @@
 		gsutil cp gs://ebd-group-project-data-bucket/2-nearby-resale/2_rank_distance.py .
 		gsutil cp gs://ebd-group-project-data-bucket/2-nearby-resale/3_distance_classifier.py .
 		gsutil cp gs://ebd-group-project-data-bucket/2-nearby-resale/4_merge_and_clean.py .
+		gsutil cp gs://ebd-group-project-data-bucket/2-nearby-resale/5_sync_to_bigquery.py .
 		chmod +x 0_start_processing.sh
