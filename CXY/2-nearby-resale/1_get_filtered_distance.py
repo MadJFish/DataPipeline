@@ -65,6 +65,7 @@ for school_row in school_row_array:
     # Get resales within 3km
     resale_distance_df = resale_df \
         .withColumn('distance', udf_get_distance(lit(school_row['lat_long']), 'lat_long')) \
+        .withColumn('school', lit(school_row['school'])) \
         .filter("distance BETWEEN 0 AND 3")
 
     # Export to csv
