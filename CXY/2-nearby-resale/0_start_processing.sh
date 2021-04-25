@@ -102,9 +102,9 @@ echo "#####################################################################"
 echo "#####################################################################"
 
 pythonfile=$(readlink -f 5_sync_to_bigquery.py)
-python $pythonfile True ebd_group_project merged_1_get_filtered_distance.csv
-python $pythonfile False ebd_group_project merged_2_rank_distance.csv
-python $pythonfile False ebd_group_project merged_3_distance_classifier.csv
+python $pythonfile 1 ebd_group_project merged_1_get_filtered_distance.csv
+python $pythonfile 0 ebd_group_project merged_2_rank_distance.csv
+python $pythonfile 0 ebd_group_project merged_3_distance_classifier.csv
 
 
 #5. Clear WIP folder

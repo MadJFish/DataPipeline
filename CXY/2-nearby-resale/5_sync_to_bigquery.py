@@ -6,7 +6,7 @@ import glob
 from google.cloud import bigquery
 from google.cloud import storage
 
-delete_dataset = False
+delete_dataset = 0
 dataset_name = ""
 targetFileName = ""
 
@@ -35,6 +35,7 @@ def create_bigquery_dataset(dataset_name_input):
 
 def delete_bigquery_dataset(dataset_name_input):
     # Make an API request.
+    print(f"Deleting Dataset: {dataset_name}")
     client.delete_dataset(
         dataset_name_input, delete_contents=True, not_found_ok=True
     )
@@ -63,9 +64,9 @@ def upload_csv_to_bigquery():
     # looks like everything worked :)
     print("Loaded {} rows into {}:{}.".format(job.output_rows, dataset_id, table_id))
 
-if(delete_dataset):
+if(delete_dataset == "1"):
     delete_bigquery_dataset(dataset_name)
+    create_bigquery_dataset(dataset_name)
 
-create_bigquery_dataset(dataset_name)
 
 upload_csv_to_bigquery()
