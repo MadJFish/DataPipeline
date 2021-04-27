@@ -5,6 +5,9 @@ echo "#### 1. Clear GCS folder before running 1_lat_long_generator.py #####"
 echo "#####################################################################"
 echo "#####################################################################"
 
+rm -r 1-wip-data/*
+rm -r 2-cleaned-data/*
+
 gsutil rm -r gs://ebd-group-project-data-bucket/1-resale-flat-prices/1-wip-data/*
 touch ./1-wip-data/placeholder.txt
 gsutil cp -r 1-wip-data gs://ebd-group-project-data-bucket/1-resale-flat-prices
